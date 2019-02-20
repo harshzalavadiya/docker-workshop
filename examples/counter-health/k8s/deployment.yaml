@@ -1,0 +1,34 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: counter-health
+  labels:
+    run: counter-health
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: counter-health
+  template:
+    metadata:
+      labels:
+        run: counter-health
+        lang: go
+    spec:
+      containers:
+        - name: counter-health
+          image: palnabarun/counter-health
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 1
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /life
+              port: 8080
+            initialDelaySeconds: 1
+            periodSeconds: 2

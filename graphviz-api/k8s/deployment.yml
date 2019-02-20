@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: graphwiz-alpha
+  labels:
+    run: graphwiz-alpha
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: graphwiz-alpha
+  template:
+    metadata:
+      labels:
+        run: graphwiz-alpha
+        lang: python
+    spec:
+      containers:
+        - name: graphwiz-alpha
+          image: wusagetnadacom/graphwiz-alpha
+          ports:
+            - containerPort: 8000
+        - name: graphwiz-web-alpha
+          image: wusagetnadacom/graphwiz-web-alpha
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GRAPHVIZ_API_ENDPOINT
+              value: "http://68.183.85.127:31189/dot"
+
+
